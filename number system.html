@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number System Converter</title>
+    <style>
+        body {
+            background-image: url(cyberpunkbird.gif);
+            background-position: center center;
+            background-size: contain; 
+            font-family:'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: rgb(178, 149, 247);
+        }
+         .container {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(159, 176, 233, 0.411);
+            width: 500px;
+            text-align: center;
+            background-color: rgba(137, 206, 238, 0.281);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid rgb(0, 0, 0);
+            border-radius: 4px;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+       
+        #converted-value {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .error {
+            color: red;
+            text-size-adjust:initial; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Number System Converter</h1>
+
+        <!-- Input number -->
+        <label for="number">Enter number:</label>
+        <input type="text" id="number" placeholder="Enter a number">
+
+        <!-- From system -->
+        <label for="fromSystem">From System:</label>
+        <select id="fromSystem">
+            <option value="binary">Binary</option>
+            <option value="decimal" selected>Decimal</option>
+            <option value="hexadecimal">Hexadecimal</option>
+            <option value="octal">Octal</option>
+        </select>
+
+        <!-- To system -->
+        <label for="toSystem">To System:</label>
+        <select id="toSystem">
+            <option value="binary">Binary</option>
+            <option value="decimal">Decimal</option>
+            <option value="hexadecimal">Hexadecimal</option>
+            <option value="octal">Octal</option>
+        </select>
+
+        <!-- Result -->
+        <div id="result">
+            <h2><strong>Result:</strong> <span id="converted-value"></span></h2>
+            <span id="error-message" class="error"></span>
+        </div>
+     
+    <script>
+        function numberConverter() {
+            const number = document.getElementById('number').value.trim();
+            const fromSystem = document.getElementById('fromSystem').value;
+            const toSystem = document.getElementById('toSystem').value;
+            let decimalValue;
+            let convertedValue = '';
+            let errorMessage = '';
+
+            // Input Validation
+            if (!number) {
+                document.getElementById('converted-value').textContent = '--';
+                document.getElementById('error-message').textContent = '';
+                return;
+            }
+
+            // Check for valid input based on the selected number system
+            if (fromSystem === 'binary' && !/^[01]+$/.test(number)) {
+                errorMessage = 'Invalid binary input';
+            } else if (fromSystem === 'hexadecimal' && !/^[0-9A-Fa-f]+$/.test(number)) {
+                errorMessage = 'Invalid hexadecimal input';
+            } else if (fromSystem === 'octal' && !/^[0-7]+$/.test(number)) {
+                errorMessage = 'Invalid octal input';
+            }
+
+            if (errorMessage) {
+                document.getElementById('converted-value').textContent = '';
+                document.getElementById('error-message').textContent = errorMessage;
+                return;
+            }
+
+            // Converting the input number into decimal
+            if (fromSystem === 'binary') {
+                decimalValue = parseInt(number, 2); 
+            } else if (fromSystem === 'hexadecimal') {
+                decimalValue = parseInt(number, 16); 
+            } else if (fromSystem === 'octal') {
+                decimalValue = parseInt(number, 8); 
+            } else {
+                decimalValue = parseInt(number, 10); 
+            }
+
+            if (toSystem === 'binary') {
+                convertedValue = decimalValue.toString(2); 
+            } else if (toSystem === 'hexadecimal') {
+                convertedValue = decimalValue.toString(16).toUpperCase(); 
+            } else if (toSystem === 'octal') {
+                convertedValue = decimalValue.toString(8); 
+            } else {
+                convertedValue = decimalValue.toString(10); 
+            }
+
+            // Display the result
+            document.getElementById('converted-value').textContent = convertedValue;
+            document.getElementById('error-message').textContent = '';
+        }
+
+        // Event listeners to update result whenever changes happen
+        document.getElementById('number').addEventListener('keyup', numberConverter);
+        document.getElementById('fromSystem').addEventListener('change', numberConverter);
+        document.getElementById('toSystem').addEventListener('change', numberConverter);
+    </script>
+
+</body>
+</html>
